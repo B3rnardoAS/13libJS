@@ -1,3 +1,3 @@
 13libJS
 
-- Segments intersection added.
+- Segments intersection example added.

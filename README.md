@@ -1,3 +1,3 @@
-- 13libJS -
+13libJS
 
 - Segments intersection added.

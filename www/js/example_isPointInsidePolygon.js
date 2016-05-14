@@ -22,7 +22,12 @@ function drawLine(p1, p2) {
 	ctx.stroke();
 }
 
-function drawPoint(p) {
+function drawPoint(p, fillStyle) {
+	if (fillStyle != undefined)
+		ctx.fillStyle = fillStyle;
+	else
+		ctx.fillStyle = "black";
+
 	ctx.beginPath();
 	ctx.moveTo(p.x, p.y);
 	ctx.arc(p.x, p.y, 3, 0, 2 * Math.PI, false);
@@ -60,23 +65,30 @@ $(window).load(function () {
 	var draw = function (e) {
 		ctx.clearRect(0, 0, h_canvas.width, h_canvas.height);
 		
-		// Segments:
-		var s1 = new $13.Segment(
-			new $13.Vector2(10, 113),
-			new $13.Vector2(131, 10)
-		);
-		var s2 = new $13.Segment(
-			new $13.Vector2(5, 10),
-			new $13.Vector2(100, 130)
-		);
+		// Point:
+		var point = new $13.Vector2($(h_canvas).width() / 2, $(h_canvas).height() / 2);
+		if (e != undefined) {
+			point.x = e.clientX;
+			point.y = e.clientY;
+		}
 
-		drawLine(s1.p1, s1.p2);
-		drawLine(s2.p1, s2.p2);
+		// Polygon:
+		var polygon = new $13.Polygon([ // Polígono 1
+			new $13.Vector2(13, 25), // Punto
+			new $13.Vector2(100, 20),
+			new $13.Vector2(110, 200),
+			new $13.Vector2(80, 400),
+			new $13.Vector2(20, 450)
+		]);
 
-		// Calc intersection:
-		var intersection = s1.intersectionWithSegment(s2);
-		if (intersection != null) // If segments intersects...
-			drawPoint(intersection); // Draws the intersecton point.
+		drawPoly(polygon);
+
+		// Check if point is inside of polygon:
+		if (point.isInsideOfPolygon(polygon)) // If segments intersects...
+			drawPoint(point, "red"); // Is inside.
+		else
+			drawPoint(point);
+		
 	};
 
 	var resize = function () {
